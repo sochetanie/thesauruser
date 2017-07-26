@@ -1,13 +1,16 @@
-/**
- * Created by JP on 7/26/17.
- */
 import React from 'react'
+
+export
 
 const Metrics = (props) => {
 
     return(
         <div>
-            {props.text()}
+            {props.text.map(x=>
+              <ul>
+               <li>{x}</li>
+               </ul>
+               )}
         </div>
     )
 }

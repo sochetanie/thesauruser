@@ -1,58 +1,48 @@
-/**
- * Created by JP on 7/26/17.
- */
 import React, { Component } from 'react'
 import Metrics from './Metrics'
 
-class MetricContainer extends Component {
-    constructor(props) {
-        super(props)
+export default class MetricContainer extends Component {
+  constructor(props) {
+      super(props)
+  }
+
+  sortTextbyNumber = () => {
+    let sWords = this.props.text.toLowerCase().trim().replace(/[,;"().]/g,'').split(/[\s\/]+/g).sort()
+
+    let ignore = ['and','the','to','a','of','for','as','i','with', 'at', 'it','is','on','that','this','can', 'an' ,'in','be','has','if']
+
+    let counts = {}
+    for(let i=0; i<sWords.length; i++){
+      if(!ignore.includes(sWords[i])){
+        counts[sWords[i]] = counts[sWords[i]] || 0
+        counts[sWords[i]]++
+      }
+    }
+    // console.log(counts)
+
+    let arr =[]
+    for (var key in counts) {
+      // arr.push([`${key}: ${counts[key]}`])
+      if(counts.hasOwnProperty(key)) {
+        arr.push( [key, counts[key]] )
+      }
     }
 
-    // addWerds = (props) => {
-    //
-    //     const counts = {}
-    //     const keys = []
-    //
-    //     let allwords = props.join("\n");
-    //     let tokens = allwords.split(/\W+/);
-    //     for (let i = 0; i < tokens.length; i++) {
-    //         let word = tokens[i].toLowerCase();
-    //         if (counts[word] === undefined) {
-    //             counts[word] = 1;
-    //             keys.push(word)
-    //         } else {
-    //             counts[word] = counts[word] + 1
-    //         }
-    //     }
-    // }
+    arr.sort(function(a,b) {
+      return b[1] - a[1]
+    })
+    return arr
+    console.log(arr)
+    
+ }
 
-    filterText = () => {
-        const wordObj = {}
-
-        let wordArray = this.props.text.split(/\W+/)
-        let loWordArr = wordArray.map(word => word.toLowerCase())
-
-        for (let i = 0; i < loWordArr.length; i++) {
-        if(wordObj[loWordArr] === undefined){
-             wordObj[loWordArr] = 1
-        } else {
-             wordObj[loWordArr] = wordObj[loWordArr] + 1
-        }
-
-        }console.log(wordObj)
-    }
-
-render() {
-    console.log(this.filterText())
-    return (
-
-        <div>
-            <Metrics text={this.filterText}/>
-            {/*<Graph />*/}
-        </div>
-        )}
+  render() {
+      return (
+          <div>
+              <Metrics text={this.sortTextbyNumber()}/>
+              {/*<Graph />*/}
+          </div>
+          )
+  }
 
 }
-
-export default MetricContainer
